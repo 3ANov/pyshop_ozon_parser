@@ -1,8 +1,12 @@
+import logging as log
+
 import scrapy
 from scrapy_selenium import SeleniumRequest
 
+from pyshop_ozon_parser.items import OzonSmartphoneItem
 
-class OzonSpiderSpider(scrapy.Spider):
+
+class OzonSpider(scrapy.Spider):
     name = 'ozon_spider'
     allowed_domains = ['www.ozon.ru']
 
@@ -11,10 +15,16 @@ class OzonSpiderSpider(scrapy.Spider):
         yield SeleniumRequest(url=url, callback=self.parse)
 
     def parse(self, response):
+        log.info(response.url)
         for phones in response.css('div.k5u'):
-            print(phones.css('tile-hover-target ok9').get())
+            item = OzonSmartphoneItem()
+            item.name = phones.css('a[href*=tile-hover-target.ok9]::text')[0].extract()
+            print(phones.css('a[href*=tile-hover-target.ok9]::text'))
+
+            # print('Проверка ' + phones.css('tile-hover-target ok9'))
             # yield {
             #     'text': phones.css('span.d3z.z3d.d4z.d6z.tsBodyL.ok9').get(),
             # }
+
 
 

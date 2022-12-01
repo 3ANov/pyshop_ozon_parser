@@ -6,7 +6,9 @@
 import scrapy
 
 
-class PyshopOzonParserItem(scrapy.Item):
-    # define the fields for your item here like:
-    # name = scrapy.Field()
-    pass
+class OzonSmartphoneItem(scrapy.Item):
+    """ Item for saving data about smartphone """
+    phone_name = scrapy.Field()
+    url = scrapy.Field()
+    os_name = scrapy.Field()
+
