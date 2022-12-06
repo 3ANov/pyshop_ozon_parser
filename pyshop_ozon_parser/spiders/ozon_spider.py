@@ -1,8 +1,9 @@
 import logging as log
 import scrapy
-from scrapy import Selector
-from scrapy_selenium import SeleniumRequest
+from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from pyshop_ozon_parser.items import OzonSmartphoneItem
 from pyshop_ozon_parser.services import SeleniumUndetectedRequest
 
@@ -10,10 +11,6 @@ from pyshop_ozon_parser.services import SeleniumUndetectedRequest
 class OzonSpider(scrapy.Spider):
     name = 'ozon_spider'
     allowed_domains = ['www.ozon.ru']
-
-    # custom_settings = {
-    #     'DOWNLOAD_DELAY': 0.5
-    # }
 
     def start_requests(self):
         url = 'https://www.ozon.ru/category/smartfony-15502/?page=1&sorting=rating'
@@ -34,11 +31,9 @@ class OzonSpider(scrapy.Spider):
         # log.info(len(phones))
 
         for phone in phones:
-            item = OzonSmartphoneItem()
-            item['url'] = phone
             # print(item['url'])
             # print(phone)
-            yield SeleniumUndetectedRequest(url=item['url'], callback=self.parse_phone_info)
+            yield SeleniumUndetectedRequest(url=phone, callback=self.parse_phone_info)
             # print('Проверка ' + phones.css('tile-hover-target ok9'))
             # yield {
             #     'text': phones.css('span.d3z.z3d.d4z.d6z.tsBodyL.ok9').get(),
@@ -50,11 +45,21 @@ class OzonSpider(scrapy.Spider):
         # )
 
     def parse_phone_info(self, response):
-        sel = Selector(response)
-        print(response)
-        log.info(response.url)
-        print(sel.xpath('//a[contains(@href, "section-description--offset-140")]').get())
-        # print(sel.xpath('//a[href = "#section-description--offset-140"]').extract())
 
-        # print(sel.css('div#section-characteristics::text').extract())
-        # print(sel.xpath('//div[@id="section-characteristics"]').
+        driver = response.meta['driver']
+        # log.info(response.url)
+
+        element = WebDriverWait(driver, 10).until(
+            EC.visibility_of_element_located((By.XPATH, '//div[contains(@data-widget, "webProductHeading")]')),
+            message='Ошибка загрузки названия телефона'
+        )
+        # log.info(element.text)
+        # log.info(driver.current_url)
+
+        link_to_description = WebDriverWait(driver, 20).until(
+            EC.element_to_be_clickable((By.XPATH, '//a[contains(@href, "section-description--offset-140")]')),
+            message='Ошибка загрузки ссылки на характеристики'
+        )
+
+        ActionChains(driver).move_to_element(link_to_description).click(link_to_description).perform()
+        yield OzonSmartphoneItem(phone_name=element.text, url=driver.current_url, os_name='')

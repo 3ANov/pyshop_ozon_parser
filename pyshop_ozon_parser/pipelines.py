@@ -9,5 +9,14 @@ from itemadapter import ItemAdapter
 
 
 class PyshopOzonParserPipeline:
+
+    def open_spider(self, spider):
+        self.data = []
+
     def process_item(self, item, spider):
+        self.data.append(item)
         return item
+
+    def close_spider(self, spider):
+        print(self.data)
+        print(len(self.data))
