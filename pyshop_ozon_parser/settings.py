@@ -52,16 +52,19 @@ ROBOTSTXT_OBEY = True
 
 
 SELENIUM_DRIVER_NAME = 'chrome'
-SELENIUM_DRIVER_EXECUTABLE_PATH = which('chromedriver')
+SELENIUM_DRIVER_EXECUTABLE_PATH = '../driver/chromedriver'
+
 SELENIUM_DRIVER_ARGUMENTS = []
-
-
+UNDETECTED_CHROMEDRIVER_PATH = './driver/chromedriver'
 
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 DOWNLOADER_MIDDLEWARES = {
+    'pyshop_ozon_parser.middlewares.SeleniumUndetectedMiddleware': 300,
+    'pyshop_ozon_parser.middlewares.PyshopOzonParserDownloaderMiddleware': 500,
+
     'scrapy_selenium.SeleniumMiddleware': 800,
-    'pyshop_ozon_parser.middlewares.PyshopOzonParserDownloaderMiddleware': 543,
+
 }
 
 # Enable or disable extensions
@@ -103,3 +106,4 @@ TWISTED_REACTOR = 'twisted.internet.asyncioreactor.AsyncioSelectorReactor'
 
 LOG_LEVEL = 'INFO'
 
+COOKIES_DEBUG = True
