@@ -60,9 +60,9 @@ UNDETECTED_CHROMEDRIVER_PATH = './driver/chromedriver'
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 DOWNLOADER_MIDDLEWARES = {
     'pyshop_ozon_parser.middlewares.SeleniumUndetectedMiddleware': 300,
+    'scrapy.downloadermiddlewares.retry.RetryMiddleware': 400,
     'pyshop_ozon_parser.middlewares.PyshopOzonParserDownloaderMiddleware': 500,
     'scrapy_selenium.SeleniumMiddleware': 800,
-
 }
 
 # Enable or disable extensions
@@ -103,4 +103,5 @@ REQUEST_FINGERPRINTER_IMPLEMENTATION = '2.7'
 TWISTED_REACTOR = 'twisted.internet.asyncioreactor.AsyncioSelectorReactor'
 
 LOG_LEVEL = 'INFO'
+
 

@@ -9,7 +9,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from .services import SeleniumUndetectedRequest
 from pyshop_ozon_parser import settings
 import undetected_chromedriver as uc
-
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
 class PyshopOzonParserSpiderMiddleware:
     # Not all methods need to be defined. If a method is not defined,
@@ -109,12 +109,15 @@ class SeleniumUndetectedMiddleware:
     """Scrapy middleware handling the requests using selenium"""
     driver_path = settings.UNDETECTED_CHROMEDRIVER_PATH
     options = uc.ChromeOptions()
-    options.headless = False
+    options.headless = True
     chrome_prefs = {}
+
+    caps = DesiredCapabilities().CHROME
+    caps["pageLoadStrategy"] = "eager"
     options.experimental_options["prefs"] = chrome_prefs
     chrome_prefs["profile.default_content_settings"] = {"images": 2}
     chrome_prefs["profile.managed_default_content_settings"] = {"images": 2}
-    driver = uc.Chrome(options=options, use_subprocess=True, driver_executable_path=driver_path)
+    driver = uc.Chrome(options=options, use_subprocess=True, driver_executable_path=driver_path, desired_capabilities=caps)
 
     def process_request(self, request, spider):
         """Process a request using the selenium driver if applicable"""

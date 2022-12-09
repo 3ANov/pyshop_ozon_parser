@@ -20,3 +20,4 @@ class PyshopOzonParserPipeline:
     def close_spider(self, spider):
         print(self.data)
         print(len(self.data))
+

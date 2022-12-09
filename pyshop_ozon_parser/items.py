@@ -11,4 +11,5 @@ class OzonSmartphoneItem(scrapy.Item):
     phone_name = scrapy.Field()
     url = scrapy.Field()
     os_name = scrapy.Field()
+    os_version = scrapy.Field()
 
