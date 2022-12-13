@@ -1,0 +1,11 @@
+       Система           Версия системы     
+       Android             Android 11.x - 51
+       Android             Android 12.x - 17
+           iOS                   iOS 14 -  9
+       Android     Android 11 (EMUI 12) -  6
+           iOS                      NaN -  4
+Собственная ОС                      NaN -  4
+Собственная ОС             Android 11.x -  3
+Собственная ОС             Android 12.x -  3
+       Android                      NaN -  2
+       Android             Android 10.x -  1

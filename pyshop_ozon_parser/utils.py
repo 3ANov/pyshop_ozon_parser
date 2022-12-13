@@ -15,7 +15,7 @@ def ozon_api_url_creator(input_url):
 
 def parse_json_find_os_info(input_json_text):
     json_data = json.loads(input_json_text)
-    os_info = {'os_name': '', 'os_version': ''}
+    os_info = {'os_name': None, 'os_version': None}
 
     for key, value in json_data['widgetStates'].items():
         if 'webCharacteristics' in key:
@@ -31,10 +31,10 @@ def parse_json_find_os_info(input_json_text):
             os_name_searched_groups = re.search(template_os_name_string, phone_characteristics_string)
 
             if os_version_search_groups is None and os_name_searched_groups is None:
-                os_info['os_version'] = ''
-                os_info['os_name'] = ''
+                os_info['os_version'] = None
+                os_info['os_name'] = None
             elif os_version_search_groups is None:
-                os_info['os_version'] = ''
+                os_info['os_version'] = None
                 os_info['os_name'] = os_name_searched_groups.group(1)
             elif os_name_searched_groups is None:
                 os_info['os_version'] = os_version_search_groups.group(5)
